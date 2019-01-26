@@ -1,21 +1,21 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Tab3Page } from './tab3.page';
+import { UvIndexPage } from './uv-index.page';
 
-describe('Tab3Page', () => {
-  let component: Tab3Page;
-  let fixture: ComponentFixture<Tab3Page>;
+describe('UvIndexPage', () => {
+  let component: UvIndexPage;
+  let fixture: ComponentFixture<UvIndexPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [Tab3Page],
+      declarations: [UvIndexPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Tab3Page);
+    fixture = TestBed.createComponent(UvIndexPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
