@@ -1,2 +1,2 @@
-export * from './firebase-mocks';
+export * from './angular-mocks';
 export * from './ionic-mocks';
