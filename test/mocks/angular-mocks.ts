@@ -12,6 +12,6 @@ export function createSwUpdateMock() {
   const mock = jasmine.createSpyObj('SwUpdate', {
     activateUpdate: Promise.resolve()
   });
-  mock['available'] = EMPTY;
+  mock.available = EMPTY;
   return mock;
 }
