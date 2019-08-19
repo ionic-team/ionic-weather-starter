@@ -12,7 +12,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../current-weather/current-weather.module#CurrentWeatherPageModule'
+            loadChildren: () => import('../current-weather/current-weather.module').then(m => m.CurrentWeatherPageModule)
           }
         ]
       },
@@ -21,7 +21,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../forecast/forecast.module#ForecastPageModule'
+            loadChildren: () => import('../forecast/forecast.module').then(m => m.ForecastPageModule)
           }
         ]
       },
@@ -30,7 +30,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../uv-index/uv-index.module#UvIndexPageModule'
+            loadChildren: () => import('../uv-index/uv-index.module').then(m => m.UvIndexPageModule)
           }
         ]
       },
