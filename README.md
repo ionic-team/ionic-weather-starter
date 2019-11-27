@@ -4,7 +4,7 @@ A starter application for the Ionic v4 enterprise training.
 
 This is essentially the tabs starter with some initial changes to rename/move files and perform some other tedious tasks that  end up taking extra time during class without real benefit.
 
-This starter is used in conjunction with the training material found here: https://training-deck.firebaseapp.com/iw-crd-v4
+This starter is used in conjunction with the training material found here: https://ionic-training-decks.firebaseapp.com/iw-crd-v4
 
 ## Getting Started
 
