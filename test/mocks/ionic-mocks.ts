@@ -1,9 +1,7 @@
+import { NavController, Platform } from '@ionic/angular';
+
 export function createNavControllerMock() {
-  return jasmine.createSpyObj('NavController', [
-    'goBack',
-    'navigateForward',
-    'navigateRoot'
-  ]);
+  return jasmine.createSpyObj<NavController>('NavController', ['navigateForward', 'navigateRoot']);
 }
 
 export function createOverlayElementMock(name: string) {
@@ -24,8 +22,8 @@ export function createOverlayControllerMock(name: string, element?: any) {
 }
 
 export function createPlatformMock() {
-  return jasmine.createSpyObj('Platform', {
+  return jasmine.createSpyObj<Platform>('Platform', {
     is: false,
-    ready: Promise.resolve()
+    ready: Promise.resolve('ready')
   });
 }
