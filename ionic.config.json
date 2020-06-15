@@ -1,7 +1,7 @@
 {
-  "name": "ionic-weather",
+  "name": "training-tabs",
   "integrations": {
-    "cordova": {}
+    "capacitor": {}
   },
   "type": "angular"
 }

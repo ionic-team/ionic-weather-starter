@@ -5,4 +5,8 @@ import { Component } from '@angular/core';
   templateUrl: 'forecast.page.html',
   styleUrls: ['forecast.page.scss']
 })
-export class ForecastPage {}
+export class ForecastPage {
+
+  constructor() {}
+
+}

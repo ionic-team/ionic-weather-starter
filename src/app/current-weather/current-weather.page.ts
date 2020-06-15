@@ -5,4 +5,8 @@ import { Component } from '@angular/core';
   templateUrl: 'current-weather.page.html',
   styleUrls: ['current-weather.page.scss']
 })
-export class CurrentWeatherPage {}
+export class CurrentWeatherPage {
+
+  constructor() {}
+
+}

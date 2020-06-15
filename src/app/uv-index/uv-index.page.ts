@@ -5,4 +5,8 @@ import { Component } from '@angular/core';
   templateUrl: 'uv-index.page.html',
   styleUrls: ['uv-index.page.scss']
 })
-export class UvIndexPage {}
+export class UvIndexPage {
+
+  constructor() {}
+
+}
