@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "training-tabs",
+  "appName": "ionic-weather",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
