@@ -5,24 +5,26 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
+import { createPlatformMock } from '../../test/mocks';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
-
   beforeEach(async(() => {
-    statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
-    splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
-    platformReadySpy = Promise.resolve();
-    platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
-
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        { provide: StatusBar, useValue: statusBarSpy },
-        { provide: SplashScreen, useValue: splashScreenSpy },
-        { provide: Platform, useValue: platformSpy },
+        {
+          provide: StatusBar,
+          useFactory: () =>
+            jasmine.createSpyObj<StatusBar>('StatusBar', ['styleDefault']),
+        },
+        {
+          provide: SplashScreen,
+          useFactory: () =>
+            jasmine.createSpyObj<SplashScreen>('SplashScreen', ['hide']),
+        },
+        { provide: Platform, useFactory: createPlatformMock },
       ],
     }).compileComponents();
   }));
@@ -33,13 +35,29 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should initialize the app', async () => {
-    TestBed.createComponent(AppComponent);
-    expect(platformSpy.ready).toHaveBeenCalled();
-    await platformReadySpy;
-    expect(statusBarSpy.styleDefault).toHaveBeenCalled();
-    expect(splashScreenSpy.hide).toHaveBeenCalled();
-  });
+  describe('initialization', () => {
+    it('waits for the platform to be ready', () => {
+      const platform = TestBed.inject(Platform);
+      TestBed.createComponent(AppComponent);
+      expect(platform.ready).toHaveBeenCalledTimes(1);
+    });
 
-  // TODO: add more tests!
+    it('sets the default status bar style when ready', async () => {
+      const platform = TestBed.inject(Platform);
+      const statusBar = TestBed.inject(StatusBar);
+      TestBed.createComponent(AppComponent);
+      expect(statusBar.styleDefault).not.toHaveBeenCalled();
+      await platform.ready();
+      expect(statusBar.styleDefault).toHaveBeenCalledTimes(1);
+    });
+
+    it('hides the splash screen when ready', async () => {
+      const platform = TestBed.inject(Platform);
+      const splashScreen = TestBed.inject(SplashScreen);
+      TestBed.createComponent(AppComponent);
+      expect(splashScreen.hide).not.toHaveBeenCalled();
+      await platform.ready();
+      expect(splashScreen.hide).toHaveBeenCalledTimes(1);
+    });
+  });
 });
