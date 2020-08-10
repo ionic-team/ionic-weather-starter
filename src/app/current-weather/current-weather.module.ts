@@ -13,8 +13,8 @@ import { CurrentWeatherPageRoutingModule } from './current-weather-routing.modul
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    CurrentWeatherPageRoutingModule
+    CurrentWeatherPageRoutingModule,
   ],
-  declarations: [CurrentWeatherPage]
+  declarations: [CurrentWeatherPage],
 })
 export class CurrentWeatherPageModule {}

@@ -9,32 +9,37 @@ const routes: Routes = [
     children: [
       {
         path: 'current-weather',
-        loadChildren: () => import('../current-weather/current-weather.module').then(m => m.CurrentWeatherPageModule)
+        loadChildren: () =>
+          import('../current-weather/current-weather.module').then(
+            m => m.CurrentWeatherPageModule,
+          ),
       },
       {
         path: 'forecast',
-        loadChildren: () => import('../forecast/forecast.module').then(m => m.ForecastPageModule)
+        loadChildren: () =>
+          import('../forecast/forecast.module').then(m => m.ForecastPageModule),
       },
       {
         path: 'uv-index',
-        loadChildren: () => import('../uv-index/uv-index.module').then(m => m.UvIndexPageModule)
+        loadChildren: () =>
+          import('../uv-index/uv-index.module').then(m => m.UvIndexPageModule),
       },
       {
         path: '',
         redirectTo: '/tabs/current-weather',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',
     redirectTo: '/tabs/current-weather',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class TabsPageRoutingModule {}

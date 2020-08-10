@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { UvIndexPage } from './uv-index.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { UvIndexPageRoutingModule } from './uv-index-routing.module'
+import { UvIndexPageRoutingModule } from './uv-index-routing.module';
 
 @NgModule({
   imports: [
@@ -15,6 +15,6 @@ import { UvIndexPageRoutingModule } from './uv-index-routing.module'
     ExploreContainerComponentModule,
     UvIndexPageRoutingModule,
   ],
-  declarations: [UvIndexPage]
+  declarations: [UvIndexPage],
 })
 export class UvIndexPageModule {}

@@ -37,10 +37,12 @@
     "@angular/language-service": "~9.1.6",
     "@capacitor/cli": "2.2.0",
     "@ionic/angular-toolkit": "^2.1.1",
+    "@ionic/prettier-config": "~1.0.0",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
+    "husky": "~4.2.5",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~5.0.0",
@@ -48,9 +50,17 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~3.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
+    "prettier": "~2.0.5",
+    "pretty-quick": "~2.0.1",
     "protractor": "~5.4.3",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
+  },
+  "prettier": "@ionic/prettier-config",
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }

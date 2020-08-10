@@ -11,7 +11,7 @@ describe('CurrentWeatherPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CurrentWeatherPage],
-      imports: [IonicModule.forRoot(), ExploreContainerComponentModule]
+      imports: [IonicModule.forRoot(), ExploreContainerComponentModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CurrentWeatherPage);

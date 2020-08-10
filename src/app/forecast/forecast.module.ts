@@ -13,8 +13,8 @@ import { ForecastPageRoutingModule } from './forecast-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    ForecastPageRoutingModule
+    ForecastPageRoutingModule,
   ],
-  declarations: [ForecastPage]
+  declarations: [ForecastPage],
 })
 export class ForecastPageModule {}

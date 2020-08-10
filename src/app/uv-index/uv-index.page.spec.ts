@@ -11,7 +11,7 @@ describe('UvIndexPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [UvIndexPage],
-      imports: [IonicModule.forRoot(), ExploreContainerComponentModule]
+      imports: [IonicModule.forRoot(), ExploreContainerComponentModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UvIndexPage);
