@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  appId: '0dd2e08fd19801e6177193ba30a52199',
+  baseUrl: 'https://api.openweathermap.org/data/2.5',
   icons: {
     sunny: 'assets/images/sunny.png',
     cloudy: 'assets/images/cloudy.png',
