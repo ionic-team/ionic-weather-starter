@@ -1,17 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      UV Index
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+<ion-content class="ion-text-center ion-padding" [fullscreen]="true">
+  <kws-uv-index class="primary-value" [uvIndex]="uvIndex?.value"></kws-uv-index>
+  <div class="description">{{ advice[(uvIndex?.riskLevel)] }}</div>
 </ion-content>
