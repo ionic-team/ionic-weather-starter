@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
+
 import { UVIndex } from '@app/models/uv-index';
 import { WeatherService } from '@app/core';
 
@@ -31,9 +33,17 @@ export class UvIndexPage {
       'will increase UV exposure.',
   ];
 
-  constructor(private weather: WeatherService) {}
+  constructor(
+    private loadingController: LoadingController,
+    private weather: WeatherService,
+  ) {}
 
-  ionViewDidEnter() {
-    this.weather.uvIndex().subscribe(u => (this.uvIndex = u));
+  async ionViewDidEnter() {
+    const loading = await this.loadingController.create();
+    loading.present();
+    this.weather.uvIndex().subscribe(u => {
+      this.uvIndex = u;
+      loading.dismiss();
+    });
   }
 }

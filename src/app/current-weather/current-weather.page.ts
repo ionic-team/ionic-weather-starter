@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 
 import { environment } from '@env/environment';
 import { WeatherService } from '@app/core';
@@ -13,9 +14,17 @@ export class CurrentWeatherPage {
   icons = environment.icons;
   currentWeather: Weather;
 
-  constructor(private weather: WeatherService) {}
+  constructor(
+    private loadingController: LoadingController,
+    private weather: WeatherService,
+  ) {}
 
-  ionViewDidEnter() {
-    this.weather.current().subscribe(w => (this.currentWeather = w));
+  async ionViewDidEnter() {
+    const loading = await this.loadingController.create();
+    loading.present();
+    this.weather.current().subscribe(w => {
+      this.currentWeather = w;
+      loading.dismiss();
+    });
   }
 }

@@ -1,22 +1,39 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, LoadingController } from '@ionic/angular';
 import { of } from 'rxjs';
 
 import { ForecastPage } from './forecast.page';
 import { WeatherService } from '@app/core';
 import { createWeatherServiceMock } from '@app/core/testing';
+import {
+  createOverlayElementMock,
+  createOverlayControllerMock,
+} from '@test/mocks';
 
 describe('ForecastPage', () => {
   let component: ForecastPage;
   let fixture: ComponentFixture<ForecastPage>;
+  let loading;
 
   beforeEach(async(() => {
+    loading = createOverlayElementMock('Loading');
     TestBed.configureTestingModule({
       declarations: [ForecastPage],
       imports: [IonicModule],
       providers: [
+        {
+          provide: LoadingController,
+          useFactory: () =>
+            createOverlayControllerMock('LoadingController', loading),
+        },
         { provide: WeatherService, useFactory: createWeatherServiceMock },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -61,17 +78,33 @@ describe('ForecastPage', () => {
       );
     });
 
-    it('gets the forecast', () => {
+    it('displays a loading indicator', fakeAsync(() => {
+      const loadingController = TestBed.inject(LoadingController);
+      component.ionViewDidEnter();
+      tick();
+      expect(loadingController.create).toHaveBeenCalledTimes(1);
+      expect(loading.present).toHaveBeenCalledTimes(1);
+    }));
+
+    it('gets the forecast', fakeAsync(() => {
       const weather = TestBed.inject(WeatherService);
       component.ionViewDidEnter();
+      tick();
       expect(weather.forecast).toHaveBeenCalledTimes(1);
-    });
+    }));
 
-    it('shows the forecast items', () => {
+    it('shows the forecast items', fakeAsync(() => {
       component.ionViewDidEnter();
+      tick();
       fixture.detectChanges();
       const f = fixture.debugElement.queryAll(By.css('kws-daily-forecast'));
       expect(f.length).toEqual(3);
-    });
+    }));
+
+    it('dismisses the loading indicator', fakeAsync(() => {
+      component.ionViewDidEnter();
+      tick();
+      expect(loading.dismiss).toHaveBeenCalledTimes(1);
+    }));
   });
 });
