@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { environment } from '@env/environment';
 import { Forecast } from '@app/models';
+import { WeatherService } from '@app/core';
 
 @Component({
   selector: 'app-forecast',
@@ -10,29 +11,11 @@ import { Forecast } from '@app/models';
 })
 export class ForecastPage {
   icons = environment.icons;
-  forecast: Forecast = [
-    [
-      {
-        temperature: 300,
-        condition: 200,
-        date: new Date(2018, 8, 19),
-      },
-    ],
-    [
-      {
-        temperature: 265,
-        condition: 601,
-        date: new Date(2018, 8, 20),
-      },
-    ],
-    [
-      {
-        temperature: 293,
-        condition: 800,
-        date: new Date(2018, 8, 21),
-      },
-    ],
-  ];
+  forecast: Forecast;
 
-  constructor() {}
+  constructor(private weather: WeatherService) {}
+
+  ionViewDidEnter() {
+    this.weather.forecast().subscribe(f => (this.forecast = f));
+  }
 }

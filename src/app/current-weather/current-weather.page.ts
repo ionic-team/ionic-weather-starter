@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { environment } from '@env/environment';
+import { WeatherService } from '@app/core';
 import { Weather } from '@app/models';
 
 @Component({
@@ -10,10 +11,11 @@ import { Weather } from '@app/models';
 })
 export class CurrentWeatherPage {
   icons = environment.icons;
-  currentWeather: Weather = {
-    temperature: 302,
-    condition: 200,
-  };
+  currentWeather: Weather;
 
-  constructor() {}
+  constructor(private weather: WeatherService) {}
+
+  ionViewDidEnter() {
+    this.weather.current().subscribe(w => (this.currentWeather = w));
+  }
 }
