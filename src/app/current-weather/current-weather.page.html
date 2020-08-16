@@ -11,11 +11,11 @@
     <kws-temperature
       class="primary-value"
       scale="F"
-      temperature="{{currentWeather?.temperature}}"
+      temperature="{{data?.temperature}}"
     ></kws-temperature>
   </div>
   <kws-condition
-    [condition]="currentWeather?.condition"
+    [condition]="data?.condition"
     [iconPaths]="icons"
   ></kws-condition>
 </ion-content>
