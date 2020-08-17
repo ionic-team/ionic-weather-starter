@@ -11,8 +11,11 @@ import { IonicModule, LoadingController } from '@ionic/angular';
 import { of } from 'rxjs';
 
 import { CurrentWeatherPage } from './current-weather.page';
-import { WeatherService } from '@app/core';
-import { createWeatherServiceMock } from '@app/core/testing';
+import { WeatherService, UserPreferencesService } from '@app/core';
+import {
+  createUserPreferencesServiceMock,
+  createWeatherServiceMock,
+} from '@app/core/testing';
 import {
   createOverlayElementMock,
   createOverlayControllerMock,
@@ -33,6 +36,10 @@ describe('CurrentWeatherPage', () => {
           provide: LoadingController,
           useFactory: () =>
             createOverlayControllerMock('LoadingController', loading),
+        },
+        {
+          provide: UserPreferencesService,
+          useFactory: createUserPreferencesServiceMock,
         },
         { provide: WeatherService, useFactory: createWeatherServiceMock },
       ],
@@ -58,6 +65,19 @@ describe('CurrentWeatherPage', () => {
           date: new Date(1485789600 * 1000),
         }),
       );
+    });
+
+    ['C', 'F'].forEach(scale => {
+      it(`gets the scale: ${scale}`, fakeAsync(() => {
+        const userPreferences = TestBed.inject(UserPreferencesService);
+        (userPreferences.getScale as any).and.returnValue(
+          Promise.resolve(scale),
+        );
+        component.ionViewDidEnter();
+        tick();
+        expect(userPreferences.getScale).toHaveBeenCalledTimes(1);
+        expect(component.scale).toEqual(scale);
+      }));
     });
 
     it('displays a loading indicator', fakeAsync(() => {
@@ -88,5 +108,35 @@ describe('CurrentWeatherPage', () => {
       tick();
       expect(loading.dismiss).toHaveBeenCalledTimes(1);
     }));
+  });
+
+  describe('toggling the scale', () => {
+    it('toggles from "C" to "F"', () => {
+      component.scale = 'C';
+      component.toggleScale();
+      expect(component.scale).toEqual('F');
+    });
+
+    it('sets the preference to "F" when toggling from "C" to "F"', () => {
+      const userPreferences = TestBed.inject(UserPreferencesService);
+      component.scale = 'C';
+      component.toggleScale();
+      expect(userPreferences.setScale).toHaveBeenCalledTimes(1);
+      expect(userPreferences.setScale).toHaveBeenCalledWith('F');
+    });
+
+    it('toggles from "F" to "C"', () => {
+      component.scale = 'F';
+      component.toggleScale();
+      expect(component.scale).toEqual('C');
+    });
+
+    it('sets the preference to "C" when toggling from "F" to "C"', () => {
+      const userPreferences = TestBed.inject(UserPreferencesService);
+      component.scale = 'F';
+      component.toggleScale();
+      expect(userPreferences.setScale).toHaveBeenCalledTimes(1);
+      expect(userPreferences.setScale).toHaveBeenCalledWith('C');
+    });
   });
 });

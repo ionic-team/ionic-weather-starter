@@ -11,8 +11,11 @@ import { IonicModule, LoadingController } from '@ionic/angular';
 import { of } from 'rxjs';
 
 import { ForecastPage } from './forecast.page';
-import { WeatherService } from '@app/core';
-import { createWeatherServiceMock } from '@app/core/testing';
+import { WeatherService, UserPreferencesService } from '@app/core';
+import {
+  createWeatherServiceMock,
+  createUserPreferencesServiceMock,
+} from '@app/core/testing';
 import {
   createOverlayElementMock,
   createOverlayControllerMock,
@@ -21,7 +24,7 @@ import {
 describe('ForecastPage', () => {
   let component: ForecastPage;
   let fixture: ComponentFixture<ForecastPage>;
-  let loading;
+  let loading: any;
 
   beforeEach(async(() => {
     loading = createOverlayElementMock('Loading');
@@ -33,6 +36,10 @@ describe('ForecastPage', () => {
           provide: LoadingController,
           useFactory: () =>
             createOverlayControllerMock('LoadingController', loading),
+        },
+        {
+          provide: UserPreferencesService,
+          useFactory: createUserPreferencesServiceMock,
         },
         { provide: WeatherService, useFactory: createWeatherServiceMock },
       ],
@@ -76,6 +83,19 @@ describe('ForecastPage', () => {
           ],
         ]),
       );
+    });
+
+    ['C', 'F'].forEach(scale => {
+      it(`gets the scale: ${scale}`, fakeAsync(() => {
+        const userPreferences = TestBed.inject(UserPreferencesService);
+        (userPreferences.getScale as any).and.returnValue(
+          Promise.resolve(scale),
+        );
+        component.ionViewDidEnter();
+        tick();
+        expect(userPreferences.getScale).toHaveBeenCalledTimes(1);
+        expect(component.scale).toEqual(scale);
+      }));
     });
 
     it('displays a loading indicator', fakeAsync(() => {

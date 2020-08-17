@@ -10,8 +10,9 @@
   <div class="information">
     <kws-temperature
       class="primary-value"
-      scale="F"
+      [scale]="scale"
       temperature="{{data?.temperature}}"
+      (click)="toggleScale()"
     ></kws-temperature>
   </div>
   <kws-condition

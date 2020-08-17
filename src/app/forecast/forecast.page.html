@@ -10,7 +10,7 @@
   <ion-list>
     <ion-item *ngFor="let f of data">
       <kws-daily-forecast
-        scale="F"
+        [scale]="scale"
         [forecasts]="f"
         [iconPaths]="icons"
       ></kws-daily-forecast>
