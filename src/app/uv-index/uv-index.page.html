@@ -7,6 +7,8 @@
 </ion-header>
 
 <ion-content class="ion-text-center ion-padding" [fullscreen]="true">
-  <kws-uv-index class="primary-value" [uvIndex]="data?.value"></kws-uv-index>
-  <div class="description">{{ advice[(data?.riskLevel)] }}</div>
+  <div *ngIf="data$ | async as data">
+    <kws-uv-index class="primary-value" [uvIndex]="data?.value"></kws-uv-index>
+    <div class="description">{{ advice[(data?.riskLevel)] }}</div>
+  </div>
 </ion-content>
