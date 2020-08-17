@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
 
 import { environment } from '@env/environment';
-import { Forecast, UVIndex, Weather } from '@app/models';
+import { Forecast, UVIndex, Weather, Coordinate } from '@app/models';
+import { LocationService } from '../location/location.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WeatherService {
-  private latitude = 43.073051;
-  private longitude = -89.40123;
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private location: LocationService) {}
 
   current(): Observable<Weather> {
     return this.getData('weather').pipe(map(res => this.unpackWeather(res)));
@@ -28,9 +26,17 @@ export class WeatherService {
   }
 
   private getData(endpoint: string): Observable<any> {
-    return this.http.get(
-      `${environment.baseUrl}/${endpoint}?lat=${this.latitude}&lon=${this.longitude}&appid=${environment.appId}`,
+    return this.getLocation().pipe(
+      flatMap(coords =>
+        this.http.get(
+          `${environment.baseUrl}/${endpoint}?lat=${coords.latitude}&lon=${coords.longitude}&appid=${environment.appId}`,
+        ),
+      ),
     );
+  }
+
+  private getLocation(): Observable<Coordinate> {
+    return from(this.location.current());
   }
 
   private unpackForecast(res: any): Forecast {

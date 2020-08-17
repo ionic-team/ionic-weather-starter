@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -7,10 +7,12 @@ import {
 import { environment } from '@env/environment';
 import { WeatherService } from './weather.service';
 import { Forecast, UVIndex, Weather } from '@app/models';
+import { LocationService } from '../location/location.service';
+import { createLocationServiceMock } from '../location/location.service.mock';
 
 describe('WeatherService', () => {
-  const latitude = 43.073051;
-  const longitude = -89.40123;
+  const latitude = 42.731338;
+  const longitude = -88.314159;
 
   let httpTestingController: HttpTestingController;
   let service: WeatherService;
@@ -18,9 +20,16 @@ describe('WeatherService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [
+        { provide: LocationService, useFactory: createLocationServiceMock },
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(WeatherService);
+    const location = TestBed.inject(LocationService);
+    (location.current as any).and.returnValue(
+      Promise.resolve({ latitude, longitude }),
+    );
   });
 
   it('should be created', () => {
@@ -28,20 +37,29 @@ describe('WeatherService', () => {
   });
 
   describe('current', () => {
-    it('gets the data from the server', () => {
+    it('gets the current location', () => {
+      const locaction = TestBed.inject(LocationService);
       const service: WeatherService = TestBed.inject(WeatherService);
       service.current().subscribe();
+      expect(locaction.current).toHaveBeenCalledTimes(1);
+    });
+
+    it('gets the data from the server', fakeAsync(() => {
+      const service: WeatherService = TestBed.inject(WeatherService);
+      service.current().subscribe();
+      tick();
       const req = httpTestingController.expectOne(
         `${environment.baseUrl}/weather?lat=${latitude}&lon=${longitude}&appid=${environment.appId}`,
       );
       expect(req.request.method).toEqual('GET');
       httpTestingController.verify();
-    });
+    }));
 
-    it('transforms the data', () => {
+    it('transforms the data', fakeAsync(() => {
       const service: WeatherService = TestBed.inject(WeatherService);
       let weather: Weather;
       service.current().subscribe(w => (weather = w));
+      tick();
       const req = httpTestingController.expectOne(
         `${environment.baseUrl}/weather?lat=${latitude}&lon=${longitude}&appid=${environment.appId}`,
       );
@@ -65,24 +83,33 @@ describe('WeatherService', () => {
         condition: 300,
         date: new Date(1485789600 * 1000),
       });
-    });
+    }));
   });
 
   describe('forecast', () => {
-    it('gets the data from the server', () => {
+    it('gets the current location', () => {
+      const locaction = TestBed.inject(LocationService);
       const service: WeatherService = TestBed.inject(WeatherService);
       service.forecast().subscribe();
+      expect(locaction.current).toHaveBeenCalledTimes(1);
+    });
+
+    it('gets the data from the server', fakeAsync(() => {
+      const service: WeatherService = TestBed.inject(WeatherService);
+      service.forecast().subscribe();
+      tick();
       const req = httpTestingController.expectOne(
         `${environment.baseUrl}/forecast?lat=${latitude}&lon=${longitude}&appid=${environment.appId}`,
       );
       expect(req.request.method).toEqual('GET');
       httpTestingController.verify();
-    });
+    }));
 
-    it('transforms the data', () => {
+    it('transforms the data', fakeAsync(() => {
       const service: WeatherService = TestBed.inject(WeatherService);
       let forecast: Forecast;
       service.forecast().subscribe(f => (forecast = f));
+      tick();
       const req = httpTestingController.expectOne(
         `${environment.baseUrl}/forecast?lat=${latitude}&lon=${longitude}&appid=${environment.appId}`,
       );
@@ -177,19 +204,27 @@ describe('WeatherService', () => {
           },
         ],
       ]);
-    });
+    }));
   });
 
   describe('UV Index', () => {
-    it('gets the data from the server', () => {
+    it('gets the current location', () => {
+      const locaction = TestBed.inject(LocationService);
       const service: WeatherService = TestBed.inject(WeatherService);
       service.uvIndex().subscribe();
+      expect(locaction.current).toHaveBeenCalledTimes(1);
+    });
+
+    it('gets the data from the server', fakeAsync(() => {
+      const service: WeatherService = TestBed.inject(WeatherService);
+      service.uvIndex().subscribe();
+      tick();
       const req = httpTestingController.expectOne(
         `${environment.baseUrl}/uvi?lat=${latitude}&lon=${longitude}&appid=${environment.appId}`,
       );
       expect(req.request.method).toEqual('GET');
       httpTestingController.verify();
-    });
+    }));
 
     [
       { value: 0, riskLevel: 0 },
@@ -203,10 +238,11 @@ describe('WeatherService', () => {
       { value: 11, riskLevel: 4 },
       { value: 18, riskLevel: 4 },
     ].forEach(test =>
-      it(`transforms the data (value: ${test.value})`, () => {
+      it(`transforms the data (value: ${test.value})`, fakeAsync(() => {
         const service: WeatherService = TestBed.inject(WeatherService);
         let uvIndex: UVIndex;
         service.uvIndex().subscribe(i => (uvIndex = i));
+        tick();
         const req = httpTestingController.expectOne(
           `${environment.baseUrl}/uvi?lat=${latitude}&lon=${longitude}&appid=${environment.appId}`,
         );
@@ -216,7 +252,7 @@ describe('WeatherService', () => {
           riskLevel: test.riskLevel,
         });
         httpTestingController.verify();
-      }),
+      })),
     );
   });
 });

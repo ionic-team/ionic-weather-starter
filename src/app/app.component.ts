@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Plugins, StatusBarStyle } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +9,25 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-  ) {
+  constructor(private platform: Platform) {
     this.initializeApp();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
+  private initializeApp() {
+    if (this.platform.is('hybrid')) {
+      const { SplashScreen, StatusBar } = Plugins;
+      StatusBar.setStyle({ style: StatusBarStyle.Dark });
+      SplashScreen.hide();
+      if (this.platform.is('android')) {
+        this.setStatusBarColor();
+      }
+    }
+  }
+
+  private setStatusBarColor() {
+    const { StatusBar } = Plugins;
+    const style = getComputedStyle(document.body);
+    const color = style.getPropertyValue('--ion-color-primary-shade').trim();
+    StatusBar.setBackgroundColor({ color });
   }
 }
